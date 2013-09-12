@@ -6,6 +6,9 @@
 
 import sys
 import os
+import zipfile
+
+extensions = ['.zip', '.tar.gz']
 
 class FileStruct:
 	
@@ -20,6 +23,7 @@ class FileStruct:
 			test.write('%s\n'%self.file_name)
 
 class DirStruct:
+
 	'''
 	In this class my main aim is to create a structure that can store
 	a complete directory, with other directories and files. Unlike a
@@ -78,14 +82,26 @@ class DirStruct:
 		all_files = os.listdir(self.parent)
 		self.number_of_files = len(all_files)
 		for each in all_files:
-			print each
 			child_path = os.path.join(self.parent,each )
+			zip_path, extension = os.path.splitext(child_path)
 			if os.path.isdir(child_path):
 				'''
 				If the child is a directory instantiate and add to the
 				list of children
 				'''
 				self.children.append(DirStruct(child_path))
+			elif extension in extensions:
+				'''
+				TODO: For extensions like 'tar' and 'zip' do not
+				extract, but go through the tar and zip to form the tree
+				and store the data structure so created using that pickle
+				thingi that Jesse and Tyson used.
+				'''
+				if extension == '.zip':
+					zipped = zipfile.ZipFile(child_path)
+					zipped.extractall(zip_path)
+					print 'Removing : %s' % child_path
+					os.remove(child_path)
 			else:
 				'''
 				This here is the base case that deals with the files,
