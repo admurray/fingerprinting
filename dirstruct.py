@@ -1,6 +1,6 @@
 '''
  Name       : dirstruct.py
- Author     : AdityaM
+ Author     : admurray
  Date       : September 8, 2013
 '''
 
